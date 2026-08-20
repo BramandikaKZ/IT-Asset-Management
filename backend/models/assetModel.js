@@ -6,17 +6,36 @@ async function getAllAssets() {
             a.id,
             a.asset_code,
             a.asset_name,
-            a.serial_number,
+
+            a.category_id,
+            a.brand_id,
+            a.status_id,
+            a.location_id,
+            a.employee_id,
+
             a.model,
+            a.serial_number,
+            a.receive_date,
+            a.note,
+
             c.category_name,
+            b.brand_name,
             s.status_name,
             l.location_name,
-            f.fullname
+
+            e.employee_code,
+            e.fullname,
+
+            d.division_name
+
         FROM assets a
         LEFT JOIN categories c ON a.category_id = c.id
+        LEFT JOIN brands b ON a.brand_id = b.id
         LEFT JOIN statuses s ON a.status_id = s.id
         LEFT JOIN locations l ON a.location_id = l.id
-        LEFT JOIN employees f ON a.employee_id = f.id
+        LEFT JOIN employees e ON a.employee_id = e.id
+        LEFT JOIN divisions d ON e.division_id = d.id
+        
         ORDER BY a.asset_code ASC
     `);
 

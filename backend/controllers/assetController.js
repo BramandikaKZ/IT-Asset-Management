@@ -20,6 +20,8 @@ async function getAllAssets(req, res) {
 
 async function createAsset(req, res) {
     try {
+        console.log("CREATE ASSET REQUEST");
+        console.log(req.body);
         // 1. ambil data dari request
         const {
             asset_code,

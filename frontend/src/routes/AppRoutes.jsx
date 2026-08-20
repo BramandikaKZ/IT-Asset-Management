@@ -3,17 +3,33 @@ import Login from "../pages/auth/Login";
 import Dashboard from "../pages/dashboard/Dashboard";
 import AssetPage from "../pages/assets/AssetPage";
 import AdminLayout from "../layouts/AdminLayout";
+import ProtectedRoute from "./ProtectedRoute";
 
 function AppRoutes() {
     return (
         <Routes>
-            <Route path="/" element={<Navigate to="/login" replace />} />
-                <Route path="/login" element={<Login />} />
-            <Route element={<AdminLayout />}>
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/assets" element={<AssetPage />} />
-            </Route>
+
+            <Route path="/login" element={<Login />} />
+
+            <Route 
+            path="/dashboard" 
+            element={
+                <ProtectedRoute>
+                    <Dashboard />
+                </ProtectedRoute>
+            } 
+            />
+            <Route 
+            path="/assets" 
+            element={
+                <ProtectedRoute>
+                    <AssetPage />
+                </ProtectedRoute>
+            } 
+            />
+
         </Routes>
+        
     );
 }
 

@@ -27,10 +27,17 @@ function verifyToken(req, res, next) {
     }
 
     try {
+        console.log("VERIFY TOKEN");
+        console.log("Header :", authHeader);
+        console.log("Token :", token);
+        console.log("Secret :", process.env.JWT_SECRET);
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        console.log("Decoded :", decoded);
         req.user = decoded;
         return next();
     } catch (error) {
+        console.log("JWT ERROR");
+        console.log(error);
         return res.status(401).json({ 
             success: false, 
             message: "Invalid token" 
