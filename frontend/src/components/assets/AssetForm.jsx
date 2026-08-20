@@ -131,13 +131,40 @@ function AssetForm({ asset, onClose, onSuccess }) {
 
         try {
             console.log("Data Yang Dikirim:", formData);
-            const result = await assetService.createAsset(formData);
-            console.log("Hasil create asset:", result);
-            alert("Asset berhasil disimpan");
+
+            let result;
+
+            if (asset) {
+                // Jika asset ada, berarti ini adalah update
+                console.log("MODE UPDATE");
+                console.log("Asset ID:", asset.id);
+
+                result = await assetService.updateAsset(asset.id, formData);
+            } else {
+                // Jika asset tidak ada, berarti ini adalah create
+                console.log("MODE CREATE");
+
+                result = await assetService.createAsset(formData);
+            }
+
+            console.log("Hasil:", result);
+            alert(
+                asset
+                    ? "Asset berhasil diperbarui"
+                    : "Asset berhasil ditambahkan"
+            );
+
             await onSuccess(); // Call the onSuccess callback to refresh the asset list
             onClose();
+
         } catch (error) {
-            console.error("Gagal menyimpan asset:", error);
+            console.error(
+                asset
+                    ? "Gagal memperbarui asset:"
+                    : "Gagal menyimpan asset:", 
+                error
+            );
+            
             alert(
                 error.response?.data?.message ||
                 "Gagal menyimpan asset"
