@@ -14,6 +14,11 @@ const assetService = {
     async updateAsset(id, data) {
         const response = await api.put(`/assets/${id}`, data);
         return response.data;
+    },
+
+    async deleteAsset(id) {
+        const response = await api.delete(`/assets/${id}`);
+        return response.data;
     }
 
 };

@@ -196,6 +196,7 @@ async function deleteAsset(req, res) {
     const { id } = req.params;
 
     try {
+        console.log("DELETE ASSET ID", id);
         const result = await assetModel.deleteAsset(id);
 
         if (result.affectedRows === 0) {
@@ -211,6 +212,7 @@ async function deleteAsset(req, res) {
         });
     }
     catch (error) {
+        console.error("DELETE ASSET ERROR:", error);
         return res.status(500).json({
             success: false,
             message: "Failed to delete asset",

@@ -1,4 +1,4 @@
-function AssetTable({ assets, onEdit }) {
+function AssetTable({ assets, onEdit, onDelete }) {
     console.log ("Props dari AssetPage:");
     console.log(assets);
     const rows = assets.map((asset, index) => (
@@ -14,7 +14,9 @@ function AssetTable({ assets, onEdit }) {
                 >
                     Edit
                 </button>
-                <button className="btn btn-danger btn-sm">
+                <button className="btn btn-danger btn-sm"
+                    onClick={() => onDelete(asset)}
+                >
                     Delete
                 </button>
             </td>

@@ -43,6 +43,27 @@ function AssetPage() {
     const currentAssets = filteredAssets.slice(indexOfFirstItem, indexOfLastItem);
     const totalPages = Math.ceil(filteredAssets.length / itemsPerPage);
 
+    const handleDelete = async (asset) => {
+        const confirmDelete = window.confirm(`Apakah Anda yakin ingin menghapus asset ${asset.asset_name}?`);
+        if (!confirmDelete) {
+            return;
+        }
+
+        try {
+            console.log("DELETE ASSET:", asset);
+            const result = await assetService.deleteAsset(asset.id);
+            console.log("DELETE ASSET:", result);
+            alert("Asset berhasil dihapus.");
+            await loadAssets();
+
+        } catch (error) {
+            console.error("Gagal menghapus asset:", error);
+            alert(
+                error.response?.data?.message || "Gagal menghapus asset."
+            );
+        }
+    };
+
     return (
         <div className="container mt-4">
             <h1>Asset Management</h1>
@@ -73,6 +94,7 @@ function AssetPage() {
                     setSelectedAsset(asset);
                     setShowForm(true);
                 }}
+                onDelete={handleDelete}
             />
 
             <div className="d-flex justify-content-center align-items-center gap-2 mt-3">
