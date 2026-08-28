@@ -36,7 +36,25 @@ async function createAsset(req, res) {
             receive_date,
             note
         } = req.body;
-        
+
+        //cek asset_code sudah ada atau belum
+        const exists = await assetModel.checkAssetCodeExists(asset_code);
+        if (exists) {
+            return res.status(400).json({
+                success: false,
+                message: `Asset code ${asset_code} sudah digunakan`
+            });
+        }
+
+        //cek serial_number sudah ada atau belum
+        const serialExists = await assetModel.checkSerialNumberExists(serial_number);
+        if (serialExists) {
+            return res.status(400).json({
+                success: false,
+                message: `Serial number ${serial_number} sudah digunakan`
+            });
+        }
+
         // 2. daftar field yang wajib diisi
         const requiredFields = [
             "asset_code",
@@ -168,6 +186,28 @@ async function updateAsset(req, res) {
                 });
             }
         }
+
+        //cek asset_code sudah ada atau belum
+        const assetCodeExists = await assetModel.checkAssetCodeExistsForUpdate(asset_code, id);
+        if (assetCodeExists) {
+            return res.status(400).json({
+                success: false,
+                message: `Asset code ${asset_code} sudah digunakan oleh asset lain`
+            });
+        }
+
+        //cek serial_number sudah ada atau belum
+        if (serial_number) {
+            const serialNumberExists = await assetModel.checkSerialNumberExistsForUpdate(serial_number, id);
+            
+            if (serialNumberExists) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Serial number ${serial_number} sudah digunakan oleh asset lain`
+                });
+            }
+        }
+
         const result = await assetModel.updateAsset(id, assetData);
 
         if (result.affectedRows === 0) {

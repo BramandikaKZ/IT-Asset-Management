@@ -177,10 +177,64 @@ async function deleteAsset(id) {
     return result;
 }
 
+async function checkAssetCodeExists(assetCode) {
+    const sql = `
+        SELECT id
+        FROM assets
+        WHERE asset_code = ?
+        LIMIT 1
+    `;
+    const [rows] = await db.query(sql, [assetCode]);
+
+    return rows.length > 0;
+}
+
+async function checkSerialNumberExists(serialNumber) {
+    const sql = `
+        SELECT id
+        FROM assets
+        WHERE serial_number = ?
+        LIMIT 1
+    `;
+    const [rows] = await db.query(sql, [serialNumber]);
+
+    return rows.length > 0;
+}
+
+async function checkAssetCodeExistsForUpdate(assetCode, id) {
+    const sql = `
+        SELECT id
+        FROM assets
+        WHERE asset_code = ?
+        AND id != ?
+        LIMIT 1
+    `;
+    const [rows] = await db.query(sql, [assetCode, id]);
+
+    return rows.length > 0;
+}
+
+async function checkSerialNumberExistsForUpdate(serialNumber, id) {
+    const sql = `
+        SELECT id
+        FROM assets
+        WHERE serial_number = ?
+        AND id != ?
+        LIMIT 1
+    `;
+    const [rows] = await db.query(sql, [serialNumber, id]);
+
+    return rows.length > 0;
+}
+
 module.exports = {
     getAllAssets,
     createAsset,
     getAssetById,
     updateAsset,
-    deleteAsset
+    deleteAsset,
+    checkAssetCodeExists,
+    checkSerialNumberExists,
+    checkAssetCodeExistsForUpdate,
+    checkSerialNumberExistsForUpdate
 };
