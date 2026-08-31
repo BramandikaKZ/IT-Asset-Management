@@ -227,6 +227,66 @@ async function checkSerialNumberExistsForUpdate(serialNumber, id) {
     return rows.length > 0;
 }
 
+async function checkCategoryExists(categoryId) {
+    const sql = `
+        SELECT id
+        FROM categories
+        WHERE id = ?
+        LIMIT 1
+    `;
+    const [rows] = await db.query(sql, [categoryId]);
+
+    return rows.length > 0;
+}
+
+async function checkBrandExists(branId) {
+    const sql = `
+        SELECT id
+        FROM brands
+        WHERE id = ?
+        LIMIT 1
+    `;
+    const [rows] = await db.query(sql, [branId]);
+
+    return rows.length > 0;
+}
+
+async function checkStatusExists(statusId) {
+    const sql = `
+        SELECT id
+        FROM statuses
+        WHERE id = ?
+        LIMIT 1
+    `;
+    const [rows] = await db.query(sql, [statusId]);
+
+    return rows.length > 0;
+}
+
+async function checkLocationExists(locationId) {
+    const sql = `
+        SELECT id
+        FROM locations
+        WHERE id = ?
+        LIMIT 1
+    `;
+    const [rows] = await db.query(sql, [locationId]);
+
+    return rows.length > 0;
+}
+
+async function checkEmployeeExists(employeeId) {
+    const sql = `
+        SELECT id
+        FROM employees
+        WHERE id = ?
+        LIMIT 1
+    `;
+    const [rows] = await db.query(sql, [employeeId]);
+    
+    return rows.length > 0;
+}
+
 module.exports = {
     getAllAssets,
     createAsset,
@@ -236,5 +296,10 @@ module.exports = {
     checkAssetCodeExists,
     checkSerialNumberExists,
     checkAssetCodeExistsForUpdate,
-    checkSerialNumberExistsForUpdate
+    checkSerialNumberExistsForUpdate,
+    checkCategoryExists,
+    checkBrandExists,
+    checkStatusExists,
+    checkLocationExists,
+    checkEmployeeExists
 };

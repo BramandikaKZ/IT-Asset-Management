@@ -77,6 +77,46 @@ async function createAsset(req, res) {
             }
         }
 
+        const categoryExists = await assetModel.checkCategoryExists(category_id);
+        if (!categoryExists) {
+            return res.status(400).json({
+                success: false,
+                message: "Category tidak ditemukan"
+            });
+        }
+
+        const brandExists = await assetModel.checkBrandExists(brand_id);
+        if (!brandExists) {
+            return res.status(400).json({
+                success: false,
+                message: "Brand tidak ditemukan"
+            });
+        }
+
+        const statusExists = await assetModel.checkStatusExists(status_id);
+        if (!statusExists) {
+            return res.status(400).json({
+                success: false,
+                message: "Status tidak ditemukan"
+            });
+        }
+
+        const locationExists = await assetModel.checkLocationExists(location_id);
+        if (!locationExists) {
+            return res.status(400).json({
+                success: false,
+                message: "Location tidak ditemukan"
+            });
+        }
+
+        const employeeExists = await assetModel.checkEmployeeExists(employee_id);
+        if (!employeeExists) {
+            return res.status(400).json({
+                success: false,
+                message: "Employee tidak ditemukan"
+            });
+        }
+
         // 4. simpan data ke database
         const asset = await assetModel.createAsset({
             asset_code,
@@ -206,6 +246,39 @@ async function updateAsset(req, res) {
                     message: `Serial number ${serial_number} sudah digunakan oleh asset lain`
                 });
             }
+        }
+
+        //cek category_id, brand_id, status_id, location_id, employee_id
+        const categoryExists = await assetModel.checkCategoryExists(category_id);
+        if (!categoryExists) {
+            return res.status(400).json({
+                success: false,
+                message: "Category tidak ditemukan"
+            });
+        }
+
+        const brandExists = await assetModel.checkBrandExists(brand_id);
+        if (!brandExists) {
+            return res.status(400).json({
+                success: false,
+                message: "Brand tidak ditemukan"
+            });
+        }
+
+        const statusExists = await assetModel.checkStatusExists(status_id);
+        if (!statusExists) {
+            return res.status(400).json({
+                success: false,
+                message: "Status tidak ditemukan"
+            });
+        }
+
+        const employeeExists = await assetModel.checkEmployeeExists(employee_id);
+        if (!employeeExists) {
+            return res.status(400).json({
+                success: false,
+                message: "Employee tidak ditemukan"
+            });
         }
 
         const result = await assetModel.updateAsset(id, assetData);
