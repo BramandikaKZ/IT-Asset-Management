@@ -287,6 +287,45 @@ async function checkEmployeeExists(employeeId) {
     return rows.length > 0;
 }
 
+async function getTotalAssets() {
+    const sql = `
+        SELECT COUNT(*) AS total
+        FROM assets
+    `;
+    const [rows] = await db.query(sql);
+    return rows[0].total;
+}
+
+async function getAssetsByStatus(){
+    const sql = `
+        SELECT
+            s.id AS status_id,
+            s.status_name,
+            COUNT(a.id) AS total
+        FROM statuses s
+        LEFT JOIN assets a ON a.status_id = s.id
+        GROUP BY s.id, s.status_name
+        ORDER BY s.id ASC
+    `;
+    const [rows] = await db.query(sql);
+    return rows;
+}
+
+async function getAssetsByCategory() {
+    const sql = `
+        SELECT
+            c.id AS category_id,
+            c.category_name,
+            COUNT(a.id) AS total
+        FROM categories c
+        LEFT JOIN assets a ON a.category_id = c.id
+        GROUP BY c.id, c.category_name
+        ORDER BY c.id ASC
+    `;
+    const [rows] = await db.query(sql);
+    return rows;
+}
+
 module.exports = {
     getAllAssets,
     createAsset,
@@ -301,5 +340,8 @@ module.exports = {
     checkBrandExists,
     checkStatusExists,
     checkLocationExists,
-    checkEmployeeExists
+    checkEmployeeExists,
+    getTotalAssets,
+    getAssetsByStatus,
+    getAssetsByCategory
 };

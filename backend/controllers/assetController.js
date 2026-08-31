@@ -335,10 +335,66 @@ async function deleteAsset(req, res) {
 
 }
 
+async function getTotalAssets(req, res) {
+    try {
+        const total = await assetModel.getTotalAssets();
+
+        res.status(200).json({
+            success: true,
+            data: {
+                total
+            }
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Failed to get total assets",
+            error: error.message
+        });
+    }
+}
+
+async function getAssetsByStatus(req, res) {
+    try {
+        const data = await assetModel.getAssetsByStatus();
+
+        return res.status(200).json({
+            success: true,
+            data
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Failed to get assets by status",
+            error: error.message
+        });
+    }
+}
+
+async function getAssetsByCategory(req, res) {
+    try {
+        const data = await assetModel.getAssetsByCategory();
+
+        return res.status(200).json({
+            success: true,
+            data
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Failed to get assets by category",
+            error: error.message
+        });
+    }
+}
+
 module.exports = {
     getAllAssets,
     createAsset,
     getAssetById,
     updateAsset,
-    deleteAsset
+    deleteAsset,
+    getTotalAssets,
+    getAssetsByStatus,
+    getAssetsByCategory
 };
