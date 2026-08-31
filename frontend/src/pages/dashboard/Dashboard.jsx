@@ -1,5 +1,27 @@
 import { useEffect, useState } from "react";
 import dashboardService from "../../services/dashboardService";
+import StatCard from "../../components/dashboard/StatCard";
+import AssetStatusChart from "../../components/dashboard/AssetStatusChart";
+import AssetCategoryChart from "../../components/dashboard/AssetCategoryChart";
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
+
+ChartJS.register(   
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+);
 
 function Dashboard() {
     const [totalAssets, setTotalAssets] = useState(0);
@@ -42,27 +64,19 @@ function Dashboard() {
             </div>
 
             {/*STATTISTIK*/}
-            <div className="row mb-4">
-                <div className="col-md-3">
-                    <div className="card shadow-sm">
-                        <div className="card-body">
-                            <h6 className="text-muted">Total Assets</h6>
-
-                            <h2 className="mb-0">{loading ? "..." : totalAssets}</h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <StatCard
+                title="Total Asset"
+                value={totalAssets}
+                loading={loading}
+            />
 
             {assetsByStatus.map((status) => (
-                <div className="col-12 col-md-4 mb-3" key={status.status_id}>
-                    <div className="card shadow-sm h-100">
-                        <div className="card-body">
-                            <h6 className="text-muted">{status.status_name}</h6>
-                            <h2 className="mb-0">{loading ? "..." : status.total}</h2>
-                        </div>
-                    </div>
-                </div>
+                <StatCard
+                    key={status.status_id}
+                    title={status.status_name}
+                    value={status.total}
+                    loading={loading}
+                />
             ))}
 
             <div className="card shadow-sm mb-4">
@@ -71,16 +85,27 @@ function Dashboard() {
 
                     <div className="row">
                         {assetsByCategory.map((category) => (
-                            <div className="col-12 col-sm-6col-md-3 mb-3" key={category.category_id}>
-                                <div className="card border h-100">
-                                    <div className="card-body">
-                                        <h6 className="text-muted">{category.category_name}</h6>
-                                        <h2 className="mb-0">{loading ? "..." : category.total}</h2>
-                                    </div>
-                                </div>
-                            </div>
+                            <StatCard
+                                key={category.category_id}
+                                title={category.category_name}
+                                value={category.total}
+                                loading={loading}
+                                columnClass="col-12 col-sm-6 col-md-3"
+                            />
                         ))}
                     </div>
+                </div>
+            </div>
+
+            <div className="row mb-4">
+                <div className="col-12">
+                    <AssetStatusChart assetsByStatus={assetsByStatus} />
+                </div>
+            </div>
+
+            <div className="row mb-4">
+                <div className="col-12">
+                    <AssetCategoryChart assetsByCategory={assetsByCategory} />
                 </div>
             </div>
 
