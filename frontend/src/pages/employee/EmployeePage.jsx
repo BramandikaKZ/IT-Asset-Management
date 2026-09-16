@@ -17,6 +17,7 @@ function EmployeePage() {
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
     const [divisionFilter, setDivisionFilter] = useState("");
+    const [statusFilter, setStatusFilter] = useState("");
     const [error, setError] = useState(null);
     const [formData, setFormData] = useState({
         employee_code: "",
@@ -152,7 +153,11 @@ function EmployeePage() {
                 divisionFilter === "" ||
                 String(employee.division_id) === divisionFilter;
 
-        return matchesSearch && matchesDivision;
+            const matchesStatus =
+                statusFilter === "" || 
+                employee.status === statusFilter;
+
+        return matchesSearch && matchesDivision && matchesStatus;
     });
 
     return (
@@ -198,6 +203,18 @@ function EmployeePage() {
                                     {division.division_name}
                                 </option>
                             ))}
+                        </select>
+                    </div>
+
+                    <div className="mb-3">
+                        <select
+                            className="form-select"
+                            value={statusFilter}
+                            onChange={(e) => setStatusFilter(e.target.value)}
+                        >
+                            <option value="">All Statuses</option>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Resigned</option>
                         </select>
                     </div>
 
