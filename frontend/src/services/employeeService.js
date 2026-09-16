@@ -1,12 +1,28 @@
 import api from "./api";
 
-const employeeService = {
-    
-    async getAllEmployees() {
-        const response = await api.get("/employees");
-        return response.data;
-    }
-
+export const getEmployees = async () => {
+    const response = await api.get("/employees");
+    return response.data;
 };
 
-export default employeeService;
+export const createEmployee = async (employeeData) => {
+    const response = await api.post("/employees", employeeData);
+    return response.data;
+};
+
+export const updateEmployee = async (id, employeeData) => {
+    const response = await api.put(`/employees/${id}`, employeeData);
+    return response.data;
+};
+
+export const deleteEmployee = async (id) => {
+    const response = await api.delete(`/employees/${id}`);
+    return response.data;
+};
+
+export default {
+    getEmployees,
+    createEmployee,
+    updateEmployee,
+    deleteEmployee,
+};

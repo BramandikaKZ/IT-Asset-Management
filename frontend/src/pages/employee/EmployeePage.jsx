@@ -1,0 +1,167 @@
+import { useEffect, useState } from "react";
+
+import EmployeeTable from "../../components/employee/EmployeeTable";
+import EmployeeForm from "../../components/employee/EmployeeForm";
+import { 
+    getEmployees,
+    createEmployee,
+    updateEmployee,
+    deleteEmployee
+} from "../../services/employeeService";
+
+function EmployeePage() {
+    const [employees, setEmployees] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [formData, setFormData] = useState({
+        employee_code: "",
+        fullname: "",
+        division_id: "",
+        position: "",
+        status: "",
+    });
+
+    const [showForm, setShowForm] = useState(false);
+    const [editingEmployee, setEditingEmployee] = useState(null);
+
+    const loadEmployees = async () => {
+        try {
+            setLoading(true);
+            setError("");
+
+            const response = await getEmployees();
+
+            if (response.success) {
+                setEmployees(response.data);
+            } else {
+                setError(response.message || "Failed to load employees.");
+            }
+        } catch (error) {
+            console.error("GET EMPLOYEES ERROR:", error);
+
+            setError(error.response?.data?.message || "Failed to load employees.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        loadEmployees();
+    }, []);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    }
+
+    const handleEdit = (employee) => {
+        setEditingEmployee(employee);
+        setFormData({
+            employee_code: employee.employee_code,
+            fullname: employee.fullname,
+            division_id: employee.division_id,
+            position: employee.position,
+            status: employee.status,
+        });
+        setShowForm(true);
+    }
+
+    const handleDelete = async (id) => {
+        const confirmed = window.confirm("Are you sure you want to delete this employee?");
+
+        if (!confirmed) return;
+
+        try {
+            await deleteEmployee(id);
+            await loadEmployees();
+        } catch (error) {
+            console.error("DELETE EMPLOYEE ERROR:", error);
+            setError(error.response?.data?.message || "Failed to delete employee");
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            if (editingEmployee) {
+                await updateEmployee(editingEmployee.id, {
+                    ...formData,
+                    division_id: Number(formData.division_id)
+                });
+            } else {
+                await createEmployee({
+                    ...formData,
+                    division_id: Number(formData.division_id)
+                });
+            }
+
+            setFormData({
+                employee_code: "",
+                fullname: "",
+                division_id: "",
+                position: "",
+                status: "",
+            });
+
+            setEditingEmployee(null);
+            setShowForm(false);
+
+        } catch (error) {
+            console.error(editingEmployee ? "UPDATE EMPLOYEE ERROR:" : "CREATE EMPLOYEE ERROR:", error);
+            setError(error.response?.data?.message || "Failed to save employee");
+        }
+    };
+
+    return (
+        <div className="container-fluid">
+
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h3 className="mb-1">Employee Management</h3>
+                    <p className="text-muted mb-0">Manage employee data</p>
+                </div>
+            </div>
+
+            {error && (
+                <div className="alert alert-danger">
+                    {error}
+                </div>
+            )}
+
+            {!showForm && (
+                <button
+                    className="btn btn-primary mb-3"
+                    onClick={() => setShowForm(true)}
+                >
+                    Add Employee
+                </button>
+            )}
+
+            {showForm && (
+                <EmployeeForm
+                    formData={formData}
+                    onChange={handleChange}
+                    onSubmit={handleSubmit}
+                    onCancel={() => {
+                        setShowForm(false);
+                        setEditingEmployee(null);
+                    }}
+                    editing={Boolean(editingEmployee)}
+                />
+            )}
+
+            <EmployeeTable
+                employees={employees}
+                loading={loading}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+            />
+        </div>
+    );
+}
+
+export default EmployeePage;
