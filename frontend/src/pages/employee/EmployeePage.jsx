@@ -15,6 +15,7 @@ function EmployeePage() {
     const [employees, setEmployees] = useState([]);
     const [divisions, setDivisions] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [search, setSearch] = useState("");
     const [error, setError] = useState(null);
     const [formData, setFormData] = useState({
         employee_code: "",
@@ -137,6 +138,17 @@ function EmployeePage() {
 
     console.log("DIVISIONS:", divisions);
 
+    const filteredEmployees = employees.filter((employee) => {
+        const keyword = search.toLowerCase();
+
+        return ( 
+            employee.employee_code.toLowerCase().includes(keyword) ||
+            employee.fullname.toLowerCase().includes(keyword) ||
+            employee.division_name.toLowerCase().includes(keyword) ||
+            employee.position.toLowerCase().includes(keyword)
+        );
+    });
+
     return (
         <div className="container-fluid">
 
@@ -154,12 +166,24 @@ function EmployeePage() {
             )}
 
             {!showForm && (
-                <button
-                    className="btn btn-primary mb-3"
-                    onClick={() => setShowForm(true)}
-                >
-                    Add Employee
-                </button>
+                <>
+                    <div className="mb-3">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Search employee..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    </div>
+
+                    <button
+                        className="btn btn-primary mb-3"
+                        onClick={() => setShowForm(true)}
+                    >
+                        Add Employee
+                    </button>
+                </>
             )}
 
             {showForm && (
@@ -177,7 +201,7 @@ function EmployeePage() {
             )}
 
             <EmployeeTable
-                employees={employees}
+                employees={filteredEmployees}
                 loading={loading}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
