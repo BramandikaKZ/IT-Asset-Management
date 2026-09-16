@@ -9,8 +9,11 @@ import {
     deleteEmployee
 } from "../../services/employeeService";
 
+import { getDivisions } from "../../services/divisionService";
+
 function EmployeePage() {
     const [employees, setEmployees] = useState([]);
+    const [divisions, setDivisions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [formData, setFormData] = useState({
@@ -45,8 +48,24 @@ function EmployeePage() {
         }
     };
 
+    const loadDivisions = async () => {
+        try {
+            const response = await getDivisions();
+
+            if (response.success) {
+                setDivisions(response.data);
+            } else {
+                setError(response.message || "Failed to load divisions.");
+            }
+        } catch (error) {
+            console.error("GET DIVISIONS ERROR:", error);
+            setError(error.response?.data?.message || "Failed to load divisions.");
+        }
+    };
+
     useEffect(() => {
         loadEmployees();
+        loadDivisions();
     }, []);
 
     const handleChange = (e) => {
@@ -116,6 +135,8 @@ function EmployeePage() {
         }
     };
 
+    console.log("DIVISIONS:", divisions);
+
     return (
         <div className="container-fluid">
 
@@ -144,6 +165,7 @@ function EmployeePage() {
             {showForm && (
                 <EmployeeForm
                     formData={formData}
+                    divisions={divisions}
                     onChange={handleChange}
                     onSubmit={handleSubmit}
                     onCancel={() => {

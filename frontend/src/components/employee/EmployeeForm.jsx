@@ -1,5 +1,6 @@
 function EmployeeForm( {
     formData,
+    divisions,
     onChange,
     onSubmit,
     onCancel,
@@ -43,16 +44,25 @@ function EmployeeForm( {
 
                         {/* Division */}
                         <div className="col-md-6 mb-3">
-                            <label className="form-label">Division ID</label>
+                            <label className="form-label">Division</label>
 
-                            <input
-                                type="text"
-                                className="form-control"
+                            <select
+                                className="form-select"
                                 name="division_id"
                                 value={formData.division_id}
                                 onChange={onChange}
                                 required
-                            />
+                            >
+                                <option value="">Select Division</option>
+                                {divisions.map((division) => (
+                                    <option 
+                                        key={division.id} 
+                                        value={division.id}
+                                    >
+                                        {division.division_name}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
                         {/* Position */}
