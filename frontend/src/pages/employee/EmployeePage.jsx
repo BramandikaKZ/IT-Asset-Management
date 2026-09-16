@@ -16,6 +16,7 @@ function EmployeePage() {
     const [divisions, setDivisions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
+    const [divisionFilter, setDivisionFilter] = useState("");
     const [error, setError] = useState(null);
     const [formData, setFormData] = useState({
         employee_code: "",
@@ -141,12 +142,17 @@ function EmployeePage() {
     const filteredEmployees = employees.filter((employee) => {
         const keyword = search.toLowerCase();
 
-        return ( 
+        const matchesSearch =
             employee.employee_code.toLowerCase().includes(keyword) ||
             employee.fullname.toLowerCase().includes(keyword) ||
             employee.division_name.toLowerCase().includes(keyword) ||
             employee.position.toLowerCase().includes(keyword)
-        );
+        
+            const matchesDivision =
+                divisionFilter === "" ||
+                String(employee.division_id) === divisionFilter;
+
+        return matchesSearch && matchesDivision;
     });
 
     return (
@@ -175,6 +181,24 @@ function EmployeePage() {
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                         />
+                    </div>
+
+                    <div className="mb-3">
+                        <select
+                            className="form-select"
+                            value={divisionFilter}
+                            onChange={(e) => setDivisionFilter(e.target.value)}
+                        >
+                            <option value="">All Divisions</option>
+                            {divisions.map((division) => (
+                                <option 
+                                    key={division.id} 
+                                    value={division.id}
+                                >
+                                    {division.division_name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <button
