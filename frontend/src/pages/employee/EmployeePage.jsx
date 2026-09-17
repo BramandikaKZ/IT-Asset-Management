@@ -178,52 +178,56 @@ function EmployeePage() {
 
             {!showForm && (
                 <>
-                    <div className="mb-3">
-                        <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Search employee..."
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                        />
-                    </div>
+                    <div className="row mb-3">
+                        <div className="col-md-6">
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Search employee..."
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
+                        </div>
 
-                    <div className="mb-3">
-                        <select
-                            className="form-select"
-                            value={divisionFilter}
-                            onChange={(e) => setDivisionFilter(e.target.value)}
+                        <div className="col-md-3">
+                            <select
+                                className="form-select"
+                                value={divisionFilter}
+                                onChange={(e) => setDivisionFilter(e.target.value)}
+                            >
+                                <option value="">All Divisions</option>
+                                {divisions.map((division) => (
+                                    <option 
+                                        key={division.id} 
+                                        value={division.id}
+                                    >
+                                        {division.division_name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div className="col-md-3">
+                            <select
+                                className="form-select"
+                                value={statusFilter}
+                                onChange={(e) => setStatusFilter(e.target.value)}
+                            >
+                                <option value="">All Statuses</option>
+                                <option value="Active">Active</option>
+                                <option value="Resigned">Resigned</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div className="d-flex justify-content-end mb-3">
+                        <button
+                            className="btn btn-primary mb-3"
+                            onClick={() => setShowForm(true)}
                         >
-                            <option value="">All Divisions</option>
-                            {divisions.map((division) => (
-                                <option 
-                                    key={division.id} 
-                                    value={division.id}
-                                >
-                                    {division.division_name}
-                                </option>
-                            ))}
-                        </select>
+                            Add Employee
+                        </button>
                     </div>
-
-                    <div className="mb-3">
-                        <select
-                            className="form-select"
-                            value={statusFilter}
-                            onChange={(e) => setStatusFilter(e.target.value)}
-                        >
-                            <option value="">All Statuses</option>
-                            <option value="Active">Active</option>
-                            <option value="Inactive">Resigned</option>
-                        </select>
-                    </div>
-
-                    <button
-                        className="btn btn-primary mb-3"
-                        onClick={() => setShowForm(true)}
-                    >
-                        Add Employee
-                    </button>
                 </>
             )}
 
