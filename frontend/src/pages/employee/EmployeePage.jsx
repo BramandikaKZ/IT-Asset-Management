@@ -73,6 +73,10 @@ function EmployeePage() {
         loadDivisions();
     }, []);
 
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [search, divisionFilter, statusFilter]);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
@@ -173,6 +177,11 @@ function EmployeePage() {
         startIndex + itemsPerPage
     );
 
+    const endIndex = Math.min(
+        startIndex + itemsPerPage,
+        filteredEmployees.length
+    );
+
     return (
         <div className="container-fluid">
 
@@ -264,6 +273,13 @@ function EmployeePage() {
                 onEdit={handleEdit}
                 onDelete={handleDelete}
             />
+
+            {filteredEmployees.length > 0 && (
+                <div className="text-muted mt-2">
+                    Showing {startIndex + 1}-{endIndex} of{" "}
+                    {filteredEmployees.length} employees
+                </div>
+            )}
 
             {totalPages > 1 && (
                 <div className="d-flex justify-content-between align-items-center mt-3">
