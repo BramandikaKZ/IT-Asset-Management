@@ -18,6 +18,8 @@ function EmployeePage() {
     const [search, setSearch] = useState("");
     const [divisionFilter, setDivisionFilter] = useState("");
     const [statusFilter, setStatusFilter] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(10);
     const [error, setError] = useState(null);
     const [formData, setFormData] = useState({
         employee_code: "",
@@ -160,6 +162,17 @@ function EmployeePage() {
         return matchesSearch && matchesDivision && matchesStatus;
     });
 
+    const totalPages = Math.ceil(
+        filteredEmployees.length / itemsPerPage
+    );
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+
+    const paginationEmployees = filteredEmployees.slice(
+        startIndex,
+        startIndex + itemsPerPage
+    );
+
     return (
         <div className="container-fluid">
 
@@ -246,11 +259,37 @@ function EmployeePage() {
             )}
 
             <EmployeeTable
-                employees={filteredEmployees}
+                employees={paginationEmployees}
                 loading={loading}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
             />
+
+            {totalPages > 1 && (
+                <div className="d-flex justify-content-between align-items-center mt-3">
+                    <span>
+                        Page {currentPage} of {totalPages}
+                    </span>
+                
+                    <div>
+                        <button
+                            className="btn btn-outline-secondary me-2"
+                            disabled={currentPage === 1}
+                            onClick={() => setCurrentPage(currentPage - 1)}
+                        >
+                            Previous
+                        </button>
+
+                        <button
+                            className="btn btn-outline-primary"
+                            disabled={currentPage === totalPages}
+                            onClick={() => setCurrentPage(currentPage + 1)}
+                        >
+                            Next
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
