@@ -43,7 +43,17 @@ function EmployeeTable( {
                             <td>{employee.fullname}</td>
                             <td>{employee.division_name}</td>
                             <td>{employee.position}</td>
-                            <td>{employee.status}</td>
+                            <td>
+                                <span
+                                    className={`badge ${
+                                        employee.status === "Active"
+                                            ? "bg-success"
+                                            : "bg-danger"
+                                    }`}
+                                >
+                                    {employee.status}
+                                </span>
+                            </td>
                             <td>
                                 <button
                                     className="btn btn-sm btn-warning me-2"
