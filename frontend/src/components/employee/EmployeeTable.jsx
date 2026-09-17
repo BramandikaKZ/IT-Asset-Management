@@ -14,8 +14,10 @@ function EmployeeTable( {
 
     if (!employees || employees.length === 0) {
         return (
-            <div className="alert alert-info">
+            <div className="alert alert-info text-center">
                 No employees found.
+                <br />
+                Try changing your search or filter.
             </div>
         );
     }
