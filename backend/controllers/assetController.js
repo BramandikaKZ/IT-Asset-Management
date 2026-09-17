@@ -153,13 +153,6 @@ async function getAssetById(req, res) {
 
     try {
         
-        if (!asset) {
-            return res.status(404).json({
-                success: false,
-                message: "Asset not found"
-            });
-        }
-
         if (!id || isNaN(id)) {
             return res.status(400).json({
                 success: false,
@@ -168,6 +161,14 @@ async function getAssetById(req, res) {
         }
 
         const asset = await assetModel.getAssetById(id);
+
+        if (!asset) {
+            return res.status(404).json({
+                success: false,
+                message: "Asset not found"
+            });
+        }
+
 
         res.status(200).json({
             success: true,
