@@ -1,6 +1,17 @@
-function AssetTable({ assets, onEdit, onDelete, onDetail }) {
+function AssetTable({ assets, loading, hasFilter, onEdit, onDelete, onDetail }) {
     console.log ("Props dari AssetPage:");
     console.log(assets);
+
+    if (loading) {
+        return (
+            <div className="card shadow-sm">
+                <div className="card-body text-center py-4">
+                    Loading assets...
+                </div>
+            </div>    
+        );
+    }
+
     const rows = assets.map((asset, index) => (
         <tr key={asset.id}>
             <td>{index + 1}</td>
@@ -65,7 +76,10 @@ function AssetTable({ assets, onEdit, onDelete, onDetail }) {
                         {assets.length === 0 ? (
                             <tr>
                                 <td colSpan="11" className="text-center">
-                                    Belum ada data asset IT yang tersedia.
+                                    {hasFilter
+                                        ? "Tidak ada asset yang sesuai dengan pencarian dan filter"
+                                        : "Belum ada data asset IT yang tersedia"
+                                    }
                                 </td>
                             </tr>
                         ) : rows}

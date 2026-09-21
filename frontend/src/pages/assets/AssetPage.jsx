@@ -8,6 +8,7 @@ import AssetDetail from "../../components/assets/AssetDetail";
 
 function AssetPage() {
     const [assets, setAssets] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState("");
     const [categories, setCategories] = useState([]);
@@ -30,6 +31,8 @@ function AssetPage() {
             console.log(result);
         } catch (error) {
             console.error(error);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -221,6 +224,13 @@ function AssetPage() {
 
             <AssetTable
                 assets={currentAssets}
+                loading={loading}
+                hasFilter={
+                    search !== "" ||
+                    statusFilter !== "" ||
+                    categoryFilter !== "" ||
+                    locationFilter !== ""
+                }
                 onEdit={(asset) => {
                     console.log("ASSET YANG DIPILIH:", asset);
 
