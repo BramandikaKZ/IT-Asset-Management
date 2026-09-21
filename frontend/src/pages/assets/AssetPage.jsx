@@ -69,7 +69,9 @@ function AssetPage() {
         asset.asset_name.toLowerCase().includes(keyword) ||
         asset.asset_code.toLowerCase().includes(keyword) ||
         asset.model?.toLowerCase().includes(keyword) ||
-        asset.serial_number?.toLowerCase().includes(keyword)
+        asset.serial_number?.toLowerCase().includes(keyword) ||
+        asset.employee_code?.toLowerCase().includes(keyword) ||
+        asset.fullname?.toLowerCase().includes(keyword);
 
         const matchesStatus = statusFilter === "" || String(asset.status_id) === statusFilter;
         const matchesCategory = categoryFilter === "" || String(asset.category_id) === categoryFilter;
