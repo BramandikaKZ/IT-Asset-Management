@@ -3,7 +3,6 @@ import categoryService from "../../services/categoryService";
 import brandService from "../../services/brandService";
 import statusService from "../../services/statusService";
 import locationService from "../../services/locationService";
-import divisionService from "../../services/divisionService";
 import employeeService from "../../services/employeeService";
 import assetService from "../../services/assetService";
 
@@ -27,7 +26,6 @@ function AssetForm({ asset, onClose, onSuccess }) {
     const [brands, setBrands] = useState([]);
     const [statuses, setStatuses] = useState([]);
     const [locations, setLocations] = useState([]);
-    const [divisions, setDivisions] = useState([]);
     const [employees, setEmployees] = useState([]);
 
     useEffect(() => {
@@ -89,19 +87,9 @@ function AssetForm({ asset, onClose, onSuccess }) {
             }
         };
 
-        const loadDivisions = async () => {
-            try {
-                const result = await divisionService.getAllDivisions();
-                console.log("Divisions:", result);
-                setDivisions(result.data || []);
-            } catch (error) {
-                console.error("Gagal mengambil divisions:", error);
-            }
-        };
-
         const loadEmployees = async () => {
             try {
-                const result = await employeeService.getAllEmployees();
+                const result = await employeeService.getEmployees();
                 console.log("Employees:", result);
                 setEmployees(result.data || []);
             } catch (error) {
@@ -113,7 +101,6 @@ function AssetForm({ asset, onClose, onSuccess }) {
         loadBrands();
         loadStatuses();
         loadLocations();
-        loadDivisions();
         loadEmployees();
     }, [asset]);
 
@@ -180,162 +167,172 @@ function AssetForm({ asset, onClose, onSuccess }) {
 
             <div className="card-body">
                 <form onSubmit={handleSubmit}>
-                    {/* Asset Code */}
-                    <div className="mb-3">
-                        <label className="form-label">Asset Code</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="asset_code"
-                            value={formData.asset_code}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
+                    <div className="row">
+                        {/* Asset Code */}
+                        <div className="col-md-6 mb-3">
+                            <label className="form-label">Asset Code</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                name="asset_code"
+                                value={formData.asset_code}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
 
-                    {/* Asset Name */}
-                    <div className="mb-3">
-                        <label className="form-label">Asset Name</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="asset_name"
-                            value={formData.asset_name}
-                            onChange={handleChange}
-                            required
-                        />
+                        {/* Asset Name */}
+                        <div className="col-md-6 mb-3">
+                            <label className="form-label">Asset Name</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                name="asset_name"
+                                value={formData.asset_name}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
                     </div>
+                    
+                    <div className="row">
+                        {/* Model */}
+                        <div className="col-md-6 mb-3">
+                            <label className="form-label">Model</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                name="model"
+                                value={formData.model}
+                                onChange={handleChange}
+                                placeholder="Contoh: Asus All in One"
+                            />
+                        </div>
+        
+                        {/* Serial Number */}
+                        <div className="col-md-6 mb-3">
+                            <label className="form-label">Serial Number</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                name="serial_number"
+                                value={formData.serial_number}
+                                onChange={handleChange}
+                                placeholder="Masukkan Serial Number"
+                            />
+                        </div>
+                    </div>    
 
-                    {/* Model */}
-                    <div className="mb-3">
-                        <label className="form-label">Model</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="model"
-                            value={formData.model}
-                            onChange={handleChange}
-                            placeholder="Contoh: Asus All in One"
-                        />
+                    <div className="row">
+                        {/* Category */}
+                        <div className="col-md-6 mb-3">
+                            <label className="form-label">Category</label>
+                            <select
+                                className="form-select"
+                                name="category_id"
+                                value={formData.category_id}
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value="">--Pilih Category--</option>
+                                {categories.map((category) => (
+                                    <option key={category.id} value={category.id}>
+                                        {category.category_name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {/* Brand */}
+                        <div className="col-md-6 mb-3">
+                            <label className="form-label">Brand</label>
+                            <select
+                                className="form-select"
+                                name="brand_id"
+                                value={formData.brand_id}
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value="">--Pilih Brand--</option>
+                                {brands.map((brand) => (
+                                    <option key={brand.id} value={brand.id}>
+                                        {brand.brand_name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>    
+
+                    <div className="row">            
+                        {/* Status */}
+                        <div className="col-md-6 mb-3">
+                            <label className="form-label">Status</label>
+                            <select
+                                className="form-select"
+                                name="status_id"
+                                value={formData.status_id}
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value="">--Pilih Status--</option>
+                                {statuses.map((status) => (
+                                    <option key={status.id} value={status.id}>
+                                        {status.status_name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {/* Location */}
+                        <div className="col-md-6 mb-3">
+                            <label className="form-label">Location</label>
+                            <select
+                                className="form-select"
+                                name="location_id"
+                                value={formData.location_id}
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value="">--Pilih Location--</option>
+                                {locations.map((location) => (
+                                    <option key={location.id} value={location.id}>
+                                        {location.location_name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
+                    
+                    <div className="row">
+                        {/* User / Employee */}
+                        <div className="col-md-6 mb-3">
+                            <label className="form-label">User / Employee</label>
+                            <select
+                                className="form-select"
+                                name="employee_id"
+                                value={formData.employee_id}
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value="">--Pilih Employee--</option>
+                                {employees.map((employee) => (
+                                    <option key={employee.id} value={employee.id}>
+                                        {employee.employee_code} - {employee.fullname}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
 
-                    {/* Serial Number */}
-                    <div className="mb-3">
-                        <label className="form-label">Serial Number</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            name="serial_number"
-                            value={formData.serial_number}
-                            onChange={handleChange}
-                            placeholder="Masukkan Serial Number"
-                        />
-                    </div>
-
-                    {/* Category */}
-                    <div className="mb-3">
-                        <label className="form-label">Category</label>
-                        <select
-                            className="form-select"
-                            name="category_id"
-                            value={formData.category_id}
-                            onChange={handleChange}
-                            required
-                        >
-                            <option value="">--Pilih Category--</option>
-                            {categories.map((category) => (
-                                <option key={category.id} value={category.id}>
-                                    {category.category_name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    {/* Brand */}
-                    <div className="mb-3">
-                        <label className="form-label">Brand</label>
-                        <select
-                            className="form-select"
-                            name="brand_id"
-                            value={formData.brand_id}
-                            onChange={handleChange}
-                            required
-                        >
-                            <option value="">--Pilih Brand--</option>
-                            {brands.map((brand) => (
-                                <option key={brand.id} value={brand.id}>
-                                    {brand.brand_name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    {/* Status */}
-                    <div className="mb-3">
-                        <label className="form-label">Status</label>
-                        <select
-                            className="form-select"
-                            name="status_id"
-                            value={formData.status_id}
-                            onChange={handleChange}
-                            required
-                        >
-                            <option value="">--Pilih Status--</option>
-                            {statuses.map((status) => (
-                                <option key={status.id} value={status.id}>
-                                    {status.status_name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    {/* Location */}
-                    <div className="mb-3">
-                        <label className="form-label">Location</label>
-                        <select
-                            className="form-select"
-                            name="location_id"
-                            value={formData.location_id}
-                            onChange={handleChange}
-                            required
-                        >
-                            <option value="">--Pilih Location--</option>
-                            {locations.map((location) => (
-                                <option key={location.id} value={location.id}>
-                                    {location.location_name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    {/* User / Employee */}
-                    <div className="mb-3">
-                        <label className="form-label">User / Employee</label>
-                        <select
-                            className="form-select"
-                            name="employee_id"
-                            value={formData.employee_id}
-                            onChange={handleChange}
-                            required
-                        >
-                            <option value="">--Pilih Employee--</option>
-                            {employees.map((employee) => (
-                                <option key={employee.id} value={employee.id}>
-                                    {employee.employee_code} - {employee.fullname}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div className="mb-3">
-                        <label className="form-label">Receive Date</label>
-                        <input
-                            type="date"
-                            className="form-control"
-                            name="receive_date"
-                            value={formData.receive_date}
-                            onChange={handleChange}
-                        />
+                        <div className="col-md-6 mb-3">
+                            <label className="form-label">Receive Date</label>
+                            <input
+                                type="date"
+                                className="form-control"
+                                name="receive_date"
+                                value={formData.receive_date}
+                                onChange={handleChange}
+                            />
+                        </div>
                     </div>
 
                     <div className="mb-3">
