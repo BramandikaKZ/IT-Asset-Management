@@ -7,6 +7,11 @@ function AssetTable({ assets, onEdit, onDelete }) {
             <td>{asset.asset_code}</td>
             <td>{asset.asset_name}</td>
             <td>{asset.category_name}</td>
+            <td>{asset.brand_name}</td>
+            <td>{asset.model}</td>
+            <td>{asset.serial_number}</td>
+            <td>{asset.location_name}</td>
+            <td>{asset.employee_code} - {asset.fullname}</td>
             <td>{asset.status_name}</td>
             <td>
                 <button className="btn btn-warning btn-sm me-2"
@@ -40,6 +45,11 @@ function AssetTable({ assets, onEdit, onDelete }) {
                             <th>Asset Code</th>
                             <th>Asset Name</th>
                             <th>Category</th>
+                            <th>Brand</th>
+                            <th>Model</th>
+                            <th>Serial Number</th>
+                            <th>Location</th>
+                            <th>User</th>
                             <th>Status</th>
                             <th width="180">Action</th>
                         </tr>

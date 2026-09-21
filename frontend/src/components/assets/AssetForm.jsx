@@ -19,7 +19,7 @@ function AssetForm({ asset, onClose, onSuccess }) {
         status_id: "",
         location_id: "",
         employee_id: "",
-        received_date: "",
+        receive_date: "",
         note: ""
     });
 
