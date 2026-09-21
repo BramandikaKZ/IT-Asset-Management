@@ -149,7 +149,7 @@ function AssetPage() {
                 </div>
 
                 {/* Category */}
-                <div className="col-md-3">
+                <div className="col-md-2">
                     <select
                         className="form-select mb-3"
                         value={categoryFilter}
@@ -168,7 +168,7 @@ function AssetPage() {
                 </div>
 
                 {/* Location */}
-                <div className="col-md-3">
+                <div className="col-md-2">
                     <select
                         className="form-select mb-3"
                         value={locationFilter}
@@ -184,6 +184,22 @@ function AssetPage() {
                             </option>
                         ))}
                     </select>
+                </div>
+
+                <div className="col-md-2">
+                    <button
+                        type="button"
+                        className="btn btn-secondary w-100"
+                        onClick={() => {
+                            setSearch("");
+                            setStatusFilter("");
+                            setCategoryFilter("");
+                            setLocationFilter("");
+                            setCurrentPage(1);
+                        }}
+                    >
+                        Reset Filter
+                    </button>
                 </div>
             </div>
 
