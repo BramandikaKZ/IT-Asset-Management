@@ -4,6 +4,7 @@ import AssetTable from "../../components/assets/AssetTable";
 import AssetForm from "../../components/assets/AssetForm";
 import categoryService from "../../services/categoryService";
 import locationService from "../../services/locationService";
+import AssetDetail from "../../components/assets/AssetDetail";
 
 function AssetPage() {
     const [assets, setAssets] = useState([]);
@@ -16,6 +17,7 @@ function AssetPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const [showForm, setShowForm] = useState(false);
     const [selectedAsset, setSelectedAsset] = useState(null);
+    const [detailAsset, setDetailAsset] = useState(null);
 
     const itemsPerPage = 10;
 
@@ -203,6 +205,13 @@ function AssetPage() {
                 </div>
             </div>
 
+            {detailAsset && (
+                <AssetDetail
+                    asset={detailAsset}
+                    onClose={() => setDetailAsset(null)}
+                />    
+            )}
+
             <AssetTable
                 assets={currentAssets}
                 onEdit={(asset) => {
@@ -212,6 +221,10 @@ function AssetPage() {
                     setShowForm(true);
                 }}
                 onDelete={handleDelete}
+                onDetail={(asset) => {
+                    console.log("DETAIL ASSET:", asset);
+                    setDetailAsset(asset);
+                }}
             />
             {filteredAssets.length > 0 && (
                 <div className="d-flex justify-content-center align-items-center gap-2 mt-3">

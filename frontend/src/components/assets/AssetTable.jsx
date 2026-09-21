@@ -1,4 +1,4 @@
-function AssetTable({ assets, onEdit, onDelete }) {
+function AssetTable({ assets, onEdit, onDelete, onDetail }) {
     console.log ("Props dari AssetPage:");
     console.log(assets);
     const rows = assets.map((asset, index) => (
@@ -14,6 +14,11 @@ function AssetTable({ assets, onEdit, onDelete }) {
             <td>{asset.employee_code} - {asset.fullname}</td>
             <td>{asset.status_name}</td>
             <td>
+                <button className="btn btn-info btn-sm me-2"
+                    onClick={() => onDetail(asset)}
+                >
+                    Detail
+                </button>
                 <button className="btn btn-warning btn-sm me-2"
                     onClick={() => onEdit(asset)}
                 >
@@ -59,7 +64,7 @@ function AssetTable({ assets, onEdit, onDelete }) {
 
                         {assets.length === 0 ? (
                             <tr>
-                                <td colSpan="6" className="text-center">
+                                <td colSpan="11" className="text-center">
                                     Belum ada data asset IT yang tersedia.
                                 </td>
                             </tr>
