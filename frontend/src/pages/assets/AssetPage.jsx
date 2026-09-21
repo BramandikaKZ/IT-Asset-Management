@@ -209,6 +209,11 @@ function AssetPage() {
                 <AssetDetail
                     asset={detailAsset}
                     onClose={() => setDetailAsset(null)}
+                    onEdit={(asset) => {
+                        setDetailAsset(null);
+                        setSelectedAsset(asset);
+                        setShowForm(true);
+                    }}
                 />    
             )}
 
