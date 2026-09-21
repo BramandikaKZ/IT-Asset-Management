@@ -9,6 +9,7 @@ const ROLES = {
     STAFF: "Staff"
 }
 
+router.get("/public/:id", assetController.getPublicAssetById);
 // Apply token verification and authorization middleware to all asset routes
 router.use(verifyToken);
 

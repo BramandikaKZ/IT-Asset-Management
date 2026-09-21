@@ -5,6 +5,7 @@ import AssetPage from "../pages/assets/AssetPage";
 import EmployeePage from "../pages/employee/EmployeePage";
 import AdminLayout from "../layouts/AdminLayout";
 import ProtectedRoute from "./ProtectedRoute";
+import AssetDetailPage from "../pages/assets/AssetDetailPage"
 
 function AppRoutes() {
     return (
@@ -27,6 +28,10 @@ function AppRoutes() {
                     <AssetPage />
                 </ProtectedRoute>
             } 
+            />
+            <Route
+            path="/assets/:id" 
+            element={<AssetDetailPage/>}
             />
             <Route 
             path="/employees"

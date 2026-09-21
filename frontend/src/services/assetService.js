@@ -2,8 +2,13 @@ import api from "./api";
 
 const assetService = {
     async getAllAssets() {
-            const response = await api.get("/assets");
-            return response.data;
+        const response = await api.get("/assets");
+        return response.data;
+    },
+
+    async getPublicAssetById(id) {
+        const response = await api.get(`/assets/public/${id}`);
+        return response.data;
     },
 
     async createAsset(data) {

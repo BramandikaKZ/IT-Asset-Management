@@ -1,4 +1,5 @@
-function AssetDetail({ asset, onClose, onEdit}) {
+import AssetQRCode from "../qr/AssetQRCode";
+function AssetDetail({ asset, onClose, onEdit, readOnly = false}) {
     if (!asset) {
         return null;
     }
@@ -9,25 +10,33 @@ function AssetDetail({ asset, onClose, onEdit}) {
                 <h5 className="mb-0">Asset Detail</h5>
 
                 <div className="d-flex gap-2">
-                    <button
-                        type="button"
-                        className="btn btn-warning btn-sm"
-                        onClick={() => onEdit(asset)}
-                    >
-                        Edit Asset
-                    </button>    
-
-                    <button
-                        type="button"
-                        className="btn btn-secondary btn-sm"
-                        onClick={onClose}
-                    >
-                        Tutup
-                    </button>
+                    {!readOnly && (
+                        <button
+                            type="button"
+                            className="btn btn-warning btn-sm"
+                            onClick={() => onEdit(asset)}
+                        >
+                            Edit Asset
+                        </button>
+                    )}
+                
+                    {!readOnly && (
+                        <button
+                            type="button"
+                            className="btn btn-secondary btn-sm"
+                            onClick={onClose}
+                        >
+                            Tutup
+                        </button>
+                    )}
                 </div>
             </div>
 
             <div className="card-body">
+                <div className="text-center mb-4">
+                    <AssetQRCode asset={asset} />
+                </div>
+
                 <div className="row">
 
                     <div className="col-md-6 mb-3">

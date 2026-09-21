@@ -186,6 +186,35 @@ async function getAssetById(req, res) {
 
 }
 
+async function getPublicAssetById(req, res) {
+    try {
+        const { id } = req.params;
+
+        const asset = await assetModel.getPublicAssetById(id);
+
+        if (!asset) {
+            return res.status(404).json({
+                success: false,
+                message: "Asset tidak ditemukan"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Asset berhasil ditemukan",
+            data: asset
+        });
+
+    } catch (error) {
+        console.error("GET PUBLIC ASSET ERROR:", error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Gagal mengambil data asset"
+        });
+    }
+}
+
 async function updateAsset(req, res) {
     const { id } = req.params;
     const assetData = req.body;
@@ -393,6 +422,7 @@ module.exports = {
     getAllAssets,
     createAsset,
     getAssetById,
+    getPublicAssetById,
     updateAsset,
     deleteAsset,
     getTotalAssets,
