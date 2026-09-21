@@ -8,7 +8,7 @@ function AssetQRCode({ asset }) {
     return (
         <div className="text-center">
             <QRCodeCanvas
-                value={`http://192.168.1.1:5173/assets/${asset.id}`}
+                value={`${import.meta.env.VITE_PUBLIC_APP_URL}/assets/${asset.id}`}
                 size={200}
             />
 
