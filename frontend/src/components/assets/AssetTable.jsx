@@ -1,4 +1,14 @@
-function AssetTable({ assets, loading, hasFilter, onEdit, onDelete, onDetail }) {
+function AssetTable({ 
+    assets, 
+    loading, 
+    hasFilter, 
+    onEdit, 
+    onDelete, 
+    onDetail,
+    selectedAssets,
+    onSelectAsset,
+    onSelectAll 
+}) {
     console.log ("Props dari AssetPage:");
     console.log(assets);
 
@@ -14,6 +24,13 @@ function AssetTable({ assets, loading, hasFilter, onEdit, onDelete, onDetail }) 
 
     const rows = assets.map((asset, index) => (
         <tr key={asset.id}>
+            <td>
+                <input
+                    type="checkbox"
+                    checked={selectedAssets.includes(asset.id)}
+                    onChange={() => onSelectAsset(asset.id)}
+                />    
+            </td>
             <td>{index + 1}</td>
             <td>{asset.asset_code}</td>
             <td>{asset.asset_name}</td>
@@ -57,6 +74,18 @@ function AssetTable({ assets, loading, hasFilter, onEdit, onDelete, onDetail }) 
 
                     <thead className="table-dark">
                         <tr>
+                            <th>
+                                <input
+                                    type="checkbox"
+                                    checked={
+                                        assets.length > 0 &&
+                                        assets.every((asset) =>
+                                            selectedAssets.includes(asset.id)
+                                        )
+                                    }
+                                    onChange={onSelectAll}
+                                />    
+                            </th>
                             <th>No</th>
                             <th>Asset Code</th>
                             <th>Asset Name</th>
@@ -75,7 +104,7 @@ function AssetTable({ assets, loading, hasFilter, onEdit, onDelete, onDetail }) 
 
                         {assets.length === 0 ? (
                             <tr>
-                                <td colSpan="11" className="text-center">
+                                <td colSpan="12" className="text-center">
                                     {hasFilter
                                         ? "Tidak ada asset yang sesuai dengan pencarian dan filter"
                                         : "Belum ada data asset IT yang tersedia"

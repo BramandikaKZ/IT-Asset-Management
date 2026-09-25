@@ -5,6 +5,7 @@ import AssetForm from "../../components/assets/AssetForm";
 import categoryService from "../../services/categoryService";
 import locationService from "../../services/locationService";
 import AssetDetail from "../../components/assets/AssetDetail";
+import AssetPrintPage from "../../components/qr/AssetPrintPage";
 
 function AssetPage() {
     const [assets, setAssets] = useState([]);
@@ -19,6 +20,8 @@ function AssetPage() {
     const [showForm, setShowForm] = useState(false);
     const [selectedAsset, setSelectedAsset] = useState(null);
     const [detailAsset, setDetailAsset] = useState(null);
+    const [selectedAssets, setSelectedAssets] = useState([]);
+    const [showPrintLabels, setShowPrintLabels] = useState(false);
 
     const itemsPerPage = 10;
 
@@ -54,6 +57,7 @@ function AssetPage() {
         }
     }
 
+
     useEffect(() => {
         loadAssets();
         loadCategories();
@@ -83,6 +87,11 @@ function AssetPage() {
         return matchesSearch && matchesStatus && matchesCategory && matchesLocation;
     });
 
+
+    const selectedAssetData = assets.filter((asset) =>
+        selectedAssets.includes(asset.id)
+    );
+
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentAssets = filteredAssets.slice(indexOfFirstItem, indexOfLastItem);
@@ -108,6 +117,34 @@ function AssetPage() {
             );
         }
     };
+
+    function handleSelectAsset(id) {
+        setSelectedAssets((prev) => {
+            if (prev.includes(id)) {
+                return prev.filter((assetID) => assetID !== id);
+            }
+
+            return [...prev, id];
+        });
+    }
+
+    function handleSelectAll() {
+        const currentPageIds = currentAssets.map((asset) => asset.id);
+
+        const allSelected = currentPageIds.every((id) =>
+            selectedAssets.includes(id)
+        );
+
+        if (allSelected) {
+            setSelectedAssets((prev) =>
+                prev.filter((id) => !currentPageIds.includes(id))
+            );
+        } else {
+            setSelectedAssets((prev) => [
+                ...new Set([...prev, ...currentPageIds]) 
+            ]);
+        }
+    }
 
     return (
         <div className="container mt-4">
@@ -222,6 +259,22 @@ function AssetPage() {
                 />    
             )}
 
+            {selectedAssets.length > 0 && (
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <strong>{selectedAssets.length}</strong> asset dipilih
+                    </div>
+
+                    <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={() => setShowPrintLabels(true)}
+                    >
+                        Print QR Terpilih
+                    </button>
+                </div>
+            )}
+
             <AssetTable
                 assets={currentAssets}
                 loading={loading}
@@ -242,7 +295,23 @@ function AssetPage() {
                     console.log("DETAIL ASSET:", asset);
                     setDetailAsset(asset);
                 }}
+                selectedAssets={selectedAssets}
+                onSelectAsset={handleSelectAsset}
+                onSelectAll={handleSelectAll}
             />
+
+            {showPrintLabels && (
+                <div className="multi-print-only">
+                    <AssetPrintPage 
+                        assets={selectedAssetData}
+                        onClose={() => {
+                            setShowPrintLabels(false);
+                            setSelectedAssets([]);
+                        }}
+                     />
+                </div>    
+            )}
+
             {filteredAssets.length > 0 && (
                 <div className="d-flex justify-content-center align-items-center gap-2 mt-3">
                     <button 

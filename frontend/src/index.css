@@ -8,3 +8,195 @@ body{
     font-family: Arial, Helvetica, sans-serif;
     background:#f5f6fa;
 }
+
+/* =========================
+   PRINT QR LABEL
+   ========================= */
+
+.print-only {
+    display: none !important;
+}
+
+.asset-print-label {
+    width: 9cm;
+    height: 5cm;
+    box-sizing: border-box;
+    border: 1px solid #000;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: row;
+    background: #fff;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
+
+.asset-print-info {
+    width: 65%;
+    padding: 7px 9px;
+    box-sizing: border-box;
+}
+
+.asset-print-title {
+    font-size: 17px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #000;
+    padding-bottom: 3px;
+}
+
+.asset-print-row {
+    display: flex;
+    align-items: baseline;
+    font-size: 11px;
+    line-height: 1.15;
+    margin-bottom: 2px;
+}
+
+.asset-print-row span {
+    width: 72px;
+    flex-shrink: 0;
+}
+
+.asset-print-row strong {
+    font-size: 11px;
+    color: #000;
+    word-break: break-word;
+}
+
+.asset-print-qr {
+    width: 35%;
+    border-left: 1px solid #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.asset-print-qr canvas {
+    width: 105px !important;
+    height: 105px !important;
+}
+
+.asset-print-row b {
+    width: 11px;
+    flex-shrink: 0;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* =========================
+   MULTI PRINT QR LABEL
+   ========================= */
+
+.asset-print-sheet {
+    display: grid;
+    grid-template-columns: 9cm 9cm;
+    gap: 10px;
+    justify-content: center;
+}
+
+.asset-print-item {
+    width: 9cm;
+    height: 5cm;
+}
+
+/* =========================
+   PRINT MODE
+   ========================= */
+
+@media print {
+
+    @page {
+        size: 9cm 5cm;
+        margin: 0;
+    }
+
+    html,
+    body {
+        width: 9cm;
+        height: 5cm;
+        margin: 0;
+        padding: 0;
+    }
+
+    body * {
+        visibility: hidden !important;
+    }
+
+    .print-only,
+    .print-only * {
+        visibility: visible !important;
+    }
+
+    .print-only {
+        display: block !important;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 9cm;
+        height: 5cm;
+    }
+
+    .asset-print-label {
+        width: 9cm;
+        height: 5cm;
+    }
+}
+
+/* =========================
+   MULTI QR PRINT - A4
+   ========================= */
+
+.multi-print-only {
+    display: none;
+}
+
+@media print {
+    @page {
+        size: A4 portrait;
+        margin: 0;
+    }
+
+    html,
+    body {
+        width: 210mm;
+        height: 297mm;
+        margin: 0;
+        padding: 0;
+    }
+
+    .multi-print-only,
+    .multi-print-only * {
+        visibility: visible !important;
+    }
+
+    .multi-print-only {
+        display: block !important;
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0;
+        padding: 10mm;
+        box-sizing: border-box;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .asset-print-sheet {
+        display: grid;
+        grid-template-columns: 90mm 90mm;
+        grid-auto-rows: 50mm;
+        gap: 5mm;
+        justify-content: start;
+        align-content: start;
+    }
+
+    .asset-print-item {
+        width: 90mm;
+        height: 50mm;
+        box-sizing: border-box;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+}

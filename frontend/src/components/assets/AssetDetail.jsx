@@ -1,15 +1,29 @@
 import AssetQRCode from "../qr/AssetQRCode";
+import AssetPrintLabel from "../qr/AssetPrintLabel";
 function AssetDetail({ asset, onClose, onEdit, readOnly = false}) {
     if (!asset) {
         return null;
     }
 
     return (
+    <>
+        <div className="print-only">
+            <AssetPrintLabel asset={asset} />
+        </div>    
+
         <div className="card shadow-sm mb-4">
             <div className="card-header d-flex justify-content-between align-items-center">
                 <h5 className="mb-0">Asset Detail</h5>
 
                 <div className="d-flex gap-2">
+                    <button
+                    type="button"
+                    className="btn btn-primary btn-sm"
+                    onClick={() => window.print()}
+                        >
+                        Print QR
+                    </button>
+
                     {!readOnly && (
                         <button
                             type="button"
@@ -33,11 +47,11 @@ function AssetDetail({ asset, onClose, onEdit, readOnly = false}) {
             </div>
 
             <div className="card-body">
-                <div className="text-center mb-4">
+                <div className="text-center mb-4 print-qr">
                     <AssetQRCode asset={asset} />
                 </div>
 
-                <div className="row">
+                <div className="row print-info">
 
                     <div className="col-md-6 mb-3">
                         <strong>Asset Code</strong>
@@ -97,6 +111,11 @@ function AssetDetail({ asset, onClose, onEdit, readOnly = false}) {
                     </div>
 
                     <div className="col-md-6 mb-3">
+                        <strong>Position</strong>
+                        <div>{asset.position || "-"}</div>
+                    </div>
+
+                    <div className="col-md-6 mb-3">
                         <strong>Receive Date</strong>
                         <div>{asset.receive_date ? asset.receive_date.split("T")[0] : "-"}</div>
                     </div>
@@ -108,6 +127,7 @@ function AssetDetail({ asset, onClose, onEdit, readOnly = false}) {
                 </div>
             </div>
         </div>
+    </>
     );
 }
 

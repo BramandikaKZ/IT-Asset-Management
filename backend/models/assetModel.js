@@ -25,6 +25,7 @@ async function getAllAssets() {
 
             e.employee_code,
             e.fullname,
+            e.position,
 
             d.division_name
 
@@ -114,6 +115,7 @@ async function getAssetById(id) {
             l.location_name,
             e.employee_code,
             e.fullname,
+            e.position,
             d.division_name
         FROM assets a
         LEFT JOIN categories c ON a.category_id = c.id
@@ -146,6 +148,7 @@ async function getPublicAssetById(id) {
 
             e.employee_code,
             e.fullname,
+            e.position,
 
             d.division_name
 
