@@ -16,6 +16,7 @@ router.use(verifyToken);
 router.get("/", authorizeRoles(ROLES.ADMIN, ROLES.STAFF), assetController.getAllAssets);
 router.post("/", authorizeRoles(ROLES.ADMIN, ROLES.STAFF), assetController.createAsset);
 router.get("/export/excel", authorizeRoles(ROLES.ADMIN, ROLES.STAFF), assetController.exportAssetsToExcel);
+router.get("/export/pdf", authorizeRoles(ROLES.ADMIN, ROLES.STAFF), assetController.exportAssetsToPDF);
 router.get("/:id", authorizeRoles(ROLES.ADMIN, ROLES.STAFF), assetController.getAssetById);
 router.put("/:id", authorizeRoles(ROLES.ADMIN, ROLES.STAFF), assetController.updateAsset);
 router.delete("/:id", authorizeRoles(ROLES.ADMIN), assetController.deleteAsset);

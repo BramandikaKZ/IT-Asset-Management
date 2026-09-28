@@ -418,7 +418,7 @@ async function getAssetsForExport(filters = {}) {
                 OR a.asset_code LIKE ?
                 OR a.model LIKE ?
                 OR a.serial_number LIKE ?
-                OR e.emplooyee_code LIKE ?
+                OR e.employee_code LIKE ?
                 OR e.fullname LIKE ?
             )
         `);

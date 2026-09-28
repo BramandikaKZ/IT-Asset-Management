@@ -33,6 +33,14 @@ const assetService = {
         });
         return response;
     },
+
+    async exportAssetsToPDF(filters = {}) {
+        const response = await api.get("/assets/export/pdf", {
+            params: filters,
+            responseType: "blob",
+        });
+        return response;
+    },
 };
 
 export default assetService;

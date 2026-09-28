@@ -85,6 +85,40 @@ function AssetPage() {
         }
     }
 
+    async function handleExportPDF() {
+        console.log("EXPORT PDF CLICKED");
+        try {
+            const response = await assetService.exportAssetsToPDF({
+                search,
+                status: statusFilter,
+                category: categoryFilter,
+                location: locationFilter,
+            });
+
+            console.log("EXPORT PDF RESPONSE:", response);
+            console.log("EXPORT PDF DATA:", response.data);
+
+            const url = window.URL.createObjectURL(
+                new Blob([response.data], {
+                    type: "application/pdf",
+                })
+            );
+
+            const link = document.createElement("a");
+
+            link.href = url;
+            link.setAttribute("download", "asset-report.pdf");
+
+            document.body.appendChild(link);
+            link.click();
+
+            link.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error("EXPORT EXCEL ERROR:", error);
+        }
+    }
+
     useEffect(() => {
         loadAssets();
         loadCategories();
@@ -192,6 +226,14 @@ function AssetPage() {
                 onClick={handleExportExcel}
             >
                 Export Excel
+            </button>
+
+            <button 
+                type="button"
+                className="btn btn-success"
+                onClick={handleExportPDF}
+            >
+                Export PDF
             </button>
 
             <div className="row g-2 mb-3">

@@ -1,5 +1,6 @@
 const assetModel = require("../models/assetModel");
 const ExcelJS = require("exceljs");
+const PDFDocument = require("pdfkit");
 
 async function getAllAssets(req, res) {
     try{
@@ -492,6 +493,89 @@ async function exportAssetsToExcel(req, res) {
     }
 }
 
+async function exportAssetsToPDF(req,res) {
+    try {
+        const filters = {
+            search: req.query.search || "",
+            status: req.query.status || "",
+            category: req.query.category || "",
+            location: req.query.location || ""
+        };
+
+        const assets = await assetModel.getAssetsForExport(filters);
+
+        const doc = new PDFDocument({
+            margin: 40,
+            size: "A4"
+        });
+
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader(
+            "Content-Disposition",
+            'attachment; filename="asset-report.pdf"'
+        );
+
+        doc.pipe(res);
+
+        doc.fontSize(18).text("IT Asset Report", {
+            align: "center"
+        });
+
+        doc.moveDown();
+
+        doc.fontSize(10).text(
+            `Total Asset: ${assets.length}`
+        );
+
+        doc.moveDown();
+
+        assets.forEach((asset, index) => {
+            doc.fontSize(11).text(
+                `${index+1}. ${asset.asset_code} - ${asset.asset_name}`
+            );
+
+            doc.fontSize(9).text(
+                `Category: ${asset.category_name || "-"} | Brand: ${asset.brand_name || "-"}`
+            );
+
+            doc.text(
+                `Model: ${asset.model || "-"} | Serial: ${asset.serial_number || "-"}`
+            );
+
+            doc.text(
+                `Status: ${asset.status_name || "-"} | Location: ${asset.location_name || "-"}`
+            );
+
+            doc.text(
+                `Employee: ${asset.fullname || "-"} | Division: ${asset.division_name || "-"}`
+            );
+
+            doc.text(
+                `Receive Date: ${
+                    asset.receive_date
+                        ? new Date (asset.receive_date).toISOString().split("T")[0]
+                        : "-"
+                }`
+            );
+
+            doc.moveDown();
+
+            if (doc.y > 750 && index < assets.length - 1) {
+                doc.addPage();
+            }
+        });
+
+        doc.end();
+    } catch (error) {
+        console.error("EXPORT ASSETS PDF ERROR:", error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Gagal export data asset ke PDF"
+        });
+    }
+}
+
 module.exports = {
     getAllAssets,
     createAsset,
@@ -502,5 +586,6 @@ module.exports = {
     getTotalAssets,
     getAssetsByStatus,
     getAssetsByCategory,
-    exportAssetsToExcel
+    exportAssetsToExcel,
+    exportAssetsToPDF
 };
