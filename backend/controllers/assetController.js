@@ -506,7 +506,8 @@ async function exportAssetsToPDF(req,res) {
 
         const doc = new PDFDocument({
             margin: 40,
-            size: "A4"
+            size: "A4",
+            layout: "landscape"
         });
 
         res.setHeader("Content-Type", "application/pdf");
@@ -529,40 +530,108 @@ async function exportAssetsToPDF(req,res) {
 
         doc.moveDown();
 
+        const columns = [
+            { label: "No", width: 20 },
+            { label: "Asset Code", width: 55 },
+            { label: "Asset Name", width: 85 },
+            { label: "Category", width: 45 },
+            { label: "Brand", width: 50 },
+            { label: "Model", width: 60 },
+            { label: "Serial", width: 65 },
+            { label: "Status", width: 55 },
+            { label: "Location", width: 60 },
+            { label: "Employee", width: 80 },
+            { label: "Division", width: 60 },
+            { label: "Receive Date", width: 65 }
+        ];
+
+        const tableWidth = columns.reduce(
+            (total, column) => total + column.width,
+            0
+        );
+
+        const tableStartX = (doc.page.width - tableWidth) / 2;
+
+        const rowHeight = 30;
+        const headerHeight = 25;
+
+        function drawTableHeader() {
+            let x = tableStartX;
+            let y = doc.y;
+
+            doc.fontSize(7);
+
+            columns.forEach((column) => {
+                doc.rect(x, y, column.width, headerHeight).stroke();
+
+                doc.text(
+                    column.label,
+                    x + 3,
+                    y + 8,
+                    {
+                        width: column.width - 6,
+                        align: "center"
+                    }
+                );
+
+                x += column.width;
+            });
+
+            doc.y = y + headerHeight;
+        }
+        drawTableHeader();
+
         assets.forEach((asset, index) => {
-            doc.fontSize(11).text(
-                `${index+1}. ${asset.asset_code} - ${asset.asset_name}`
-            );
-
-            doc.fontSize(9).text(
-                `Category: ${asset.category_name || "-"} | Brand: ${asset.brand_name || "-"}`
-            );
-
-            doc.text(
-                `Model: ${asset.model || "-"} | Serial: ${asset.serial_number || "-"}`
-            );
-
-            doc.text(
-                `Status: ${asset.status_name || "-"} | Location: ${asset.location_name || "-"}`
-            );
-
-            doc.text(
-                `Employee: ${asset.fullname || "-"} | Division: ${asset.division_name || "-"}`
-            );
-
-            doc.text(
-                `Receive Date: ${
-                    asset.receive_date
-                        ? new Date (asset.receive_date).toISOString().split("T")[0]
-                        : "-"
-                }`
-            );
-
-            doc.moveDown();
-
-            if (doc.y > 750 && index < assets.length - 1) {
+            if (
+                doc.y + rowHeight >
+                doc.page.height - doc.page.margins.bottom
+            ) {
                 doc.addPage();
+                drawTableHeader();
             }
+
+            let x = tableStartX;
+            const y = doc.y;
+
+            const row = [
+                index + 1,
+                asset.asset_code,
+                asset.asset_name,
+                asset.category_name || "-",
+                asset.brand_name || "-",
+                asset.model || "-",
+                asset.serial_number || "-",
+                asset.status_name || "-",
+                asset.location_name || "-",
+                asset.fullname || "-",
+                asset.division_name || "-",
+                asset.receive_date
+                    ? new Date(asset.receive_date)
+                        .toISOString()
+                        .split("T")[0]
+                    : "-"    
+            ];
+
+            row.forEach((value, columnIndex) => {
+                const column = columns[columnIndex];
+                
+                doc.rect(
+                    x, y, column.width, rowHeight
+                ).stroke();
+                
+                doc.text(
+                    String(value),
+                    x + 3,
+                    y + 8,
+                    {
+                        width: column.width - 6,
+                        height: rowHeight - 6,
+                        align: columnIndex === 0 ? "center" : "left"
+                    }
+                );
+                x += column.width;
+            });
+            doc.y = y + rowHeight;
         });
 
         doc.end();
