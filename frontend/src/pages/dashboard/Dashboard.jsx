@@ -64,10 +64,12 @@ function Dashboard() {
             </div>
 
             {/*STATTISTIK*/}
+        <div className="row">
             <StatCard
                 title="Total Asset"
                 value={totalAssets}
                 loading={loading}
+                columnClass="col-12 col-sm-6 col-md-4"
             />
 
             {assetsByStatus.map((status) => (
@@ -76,8 +78,10 @@ function Dashboard() {
                     title={status.status_name}
                     value={status.total}
                     loading={loading}
+                    columnClass="col-12 col-sm-6 col-md-4"
                 />
             ))}
+        </div>
 
             <div className="card shadow-sm mb-4">
                 <div className="card-body">
@@ -98,13 +102,11 @@ function Dashboard() {
             </div>
 
             <div className="row mb-4">
-                <div className="col-12">
+                <div className="col-12 col-lg-6 mb-3 mb-lg-0">
                     <AssetStatusChart assetsByStatus={assetsByStatus} />
                 </div>
-            </div>
 
-            <div className="row mb-4">
-                <div className="col-12">
+                <div className="col-12 col-lg-6">
                     <AssetCategoryChart assetsByCategory={assetsByCategory} />
                 </div>
             </div>

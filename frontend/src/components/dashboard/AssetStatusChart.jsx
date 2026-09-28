@@ -32,6 +32,7 @@ function AssetStatusChart({ assetsByStatus }) {
 
     const chartOptions = {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
             legend: {
                 display: false
@@ -43,7 +44,10 @@ function AssetStatusChart({ assetsByStatus }) {
         <div className="card shadow-sm">
             <div className="card-body">
                 <h5 className="mb-3">Assets Berdasarkan Status</h5>
-                <Bar data={chartData} options={chartOptions} />
+
+                <div style={{ height: "250px"}}>
+                    <Bar data={chartData} options={chartOptions} />
+                </div>    
             </div>
         </div>
     );
