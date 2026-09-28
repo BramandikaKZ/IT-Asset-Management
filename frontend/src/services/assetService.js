@@ -24,8 +24,15 @@ const assetService = {
     async deleteAsset(id) {
         const response = await api.delete(`/assets/${id}`);
         return response.data;
-    }
+    },
 
+    async exportAssetsToExcel(filters = {}) {
+        const response = await api.get("/assets/export/excel", {
+            params: filters,
+            responseType: "blob",
+        });
+        return response;
+    },
 };
 
 export default assetService;

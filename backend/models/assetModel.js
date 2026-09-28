@@ -376,6 +376,90 @@ async function getAssetsByCategory() {
     return rows;
 }
 
+async function getAssetsForExport(filters = {}) {
+    const {
+        search = "",
+        status = "",
+        category = "",
+        location = ""
+    } = filters;
+    
+    let query = `
+        SELECT
+            a.asset_code,
+            a.asset_name,
+            c.category_name,
+            b.brand_name,
+            a.model,
+            a.serial_number,
+            s.status_name,
+            l.location_name,
+            e.employee_code,
+            e.fullname,
+            e.position,
+            d.division_name,
+            a.receive_date,
+            a.note
+        FROM assets a
+        LEFT JOIN categories c ON a.category_id = c.id
+        LEFT JOIN brands b ON a.brand_id = b.id    
+        LEFT JOIN statuses s ON a.status_id = s.id
+        LEFT JOIN locations l ON a.location_id = l.id
+        LEFT JOIN employees e ON a.employee_id = e.id
+        LEFT JOIN divisions d ON e.division_id = d.id
+    `;
+    const conditions = [];
+    const params = [];
+
+    if (search) {
+        conditions.push(`
+            (
+                a.asset_name LIKE ?
+                OR a.asset_code LIKE ?
+                OR a.model LIKE ?
+                OR a.serial_number LIKE ?
+                OR e.emplooyee_code LIKE ?
+                OR e.fullname LIKE ?
+            )
+        `);
+
+        const keyword = `%${search}%`;
+
+        params.push(
+            keyword,
+            keyword,
+            keyword,
+            keyword,
+            keyword,
+            keyword
+        );
+        
+    }
+
+    if (status) {
+        conditions.push("a.status_id = ?");
+        params.push(status);
+    }
+
+    if (category) {
+        conditions.push("a.category_id = ?");
+        params.push(category);
+    }
+
+    if (location) {
+        conditions.push("a.location_id = ?");
+        params.push(location);
+    }
+
+    if (conditions.length > 0) {
+        query += ` WHERE ${conditions.join(" AND ")}`;
+    }
+
+    query += ` ORDER BY a.asset_code ASC`;
+    const [rows] = await db.query(query, params);
+    return rows;
+}
+
 module.exports = {
     getAllAssets,
     createAsset,
@@ -394,5 +478,6 @@ module.exports = {
     checkEmployeeExists,
     getTotalAssets,
     getAssetsByStatus,
-    getAssetsByCategory
+    getAssetsByCategory,
+    getAssetsForExport
 };

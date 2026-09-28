@@ -57,6 +57,33 @@ function AssetPage() {
         }
     }
 
+    async function handleExportExcel(){
+        try {
+            const response = await assetService.exportAssetsToExcel({
+                search,
+                status: statusFilter,
+                category: categoryFilter,
+                location: locationFilter,
+            });
+
+            const url = window.URL.createObjectURL(
+                new Blob([response.data])
+            );
+
+            const link = document.createElement("a");
+
+            link.href = url;
+            link.setAttribute("download", "asset-report.xlsx");
+
+            document.body.appendChild(link);
+            link.click();
+
+            link.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error("EXPORT EXCEL ERROR:", error);
+        }
+    }
 
     useEffect(() => {
         loadAssets();
@@ -157,6 +184,14 @@ function AssetPage() {
                 }}
             >
                 + Tambah Asset
+            </button>
+
+            <button 
+                type="button"
+                className="btn btn-success"
+                onClick={handleExportExcel}
+            >
+                Export Excel
             </button>
 
             <div className="row g-2 mb-3">

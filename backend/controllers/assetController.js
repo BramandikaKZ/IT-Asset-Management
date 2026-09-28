@@ -1,4 +1,5 @@
 const assetModel = require("../models/assetModel");
+const ExcelJS = require("exceljs");
 
 async function getAllAssets(req, res) {
     try{
@@ -418,6 +419,79 @@ async function getAssetsByCategory(req, res) {
     }
 }
 
+async function exportAssetsToExcel(req, res) {
+    try {
+        const filters = {
+            search: req.query.search || "",
+            status: req.query.status || "",
+            category: req.query.category || "",
+            location: req.query.location || ""
+        }
+        const assets = await assetModel.getAssetsForExport(filters);
+
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet("Assets");
+
+        worksheet.columns = [
+            { header: "Asset Code", key: "asset_code", width: 15 },
+            { header: "Asset Name", key: "asset_name", width: 25 },
+            { header: "Category", key: "category_name", width: 20 },
+            { header: "Brand", key: "brand_name", width: 20 },
+            { header: "Model", key: "model", width: 20 },
+            { header: "Serial Number", key: "serial_number", width: 25 },
+            { header: "Status", key: "status_name", width: 15 },
+            { header: "Location", key: "location_name", width: 20 },
+            { header: "Employee Code", key: "employee_code", width: 18 },
+            { header: "Employee Name", key: "fullname", width: 25 },
+            { header: "Position", key: "position", width: 25 },
+            { header: "Division", key: "division_name", width: 20 },
+            { header: "Receive Date", key: "receive_date", width: 15 },
+            { header: "Note", key: "note", width: 30 },
+        ];
+
+        assets.forEach((asset) => {
+            worksheet.addRow(asset);
+        });
+
+        worksheet.getRow(1).font = {
+            bold: true
+        };
+
+        worksheet.getRow(1).alignment = {
+            vertical: "middle",
+            horizontal: "center"
+        };
+
+        worksheet.views = [
+            {
+                state: "frozen",
+                ySplit: 1
+            }
+        ];
+
+        res.setHeader(
+            "Content-Type",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        );
+
+        res.setHeader(
+            "Content-Disposition",
+            'attachment; filename="asset-report.xlsx"'
+        );
+
+        await workbook.xlsx.write(res);
+
+        res.end();
+    }catch (error) {
+        console.error("EXPORT ASSET ERROR:", error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Gagal export data asset"
+        });
+    }
+}
+
 module.exports = {
     getAllAssets,
     createAsset,
@@ -427,5 +501,6 @@ module.exports = {
     deleteAsset,
     getTotalAssets,
     getAssetsByStatus,
-    getAssetsByCategory
+    getAssetsByCategory,
+    exportAssetsToExcel
 };
