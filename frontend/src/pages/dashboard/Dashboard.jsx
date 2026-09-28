@@ -117,9 +117,9 @@ function Dashboard() {
 
                     <ul>
                         <li>Authentication:done</li>
-                        <li>Dashboard:on going</li>
-                        <li>Asset Management:on going</li>
-                        <li>Employee Management:on going</li>
+                        <li>Dashboard:done</li>
+                        <li>Asset Management:done</li>
+                        <li>Employee Management:done</li>
                         <li>Category Management:on going</li>
                         <li>Brand Management:on going</li>
                         <li>Location Management:on going</li>
