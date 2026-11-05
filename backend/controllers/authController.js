@@ -6,7 +6,7 @@ async function login(req, res) {
     console.log("MASUK LOGIN CONTROLLER");
     const { username, password } = req.body;
     console.log(username);
-    console.log(password);
+    //console.log(password);
 
     if (!username || !password) {
         return res.status(400).json({ 
@@ -38,7 +38,7 @@ async function login(req, res) {
         }
 
         console.log("STEP 3 - Token Payload:");
-        console.log(process.env.JWT_SECRET);
+        //console.log(process.env.JWT_SECRET);
 
         const token = jwt.sign(
             
@@ -47,7 +47,7 @@ async function login(req, res) {
             { expiresIn: "1h" }
         );
         console.log("STEP 4 - Token Berhasil Dibuat:");
-        console.log(token);
+        //console.log(token);
 
         return res.status(200).json({
             success: true,

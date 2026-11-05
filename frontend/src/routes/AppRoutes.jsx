@@ -6,6 +6,7 @@ import EmployeePage from "../pages/employee/EmployeePage";
 import AdminLayout from "../layouts/AdminLayout";
 import ProtectedRoute from "./ProtectedRoute";
 import AssetDetailPage from "../pages/assets/AssetDetailPage"
+import CategoryPage from "../pages/category/CategoryPage";
 
 function AppRoutes() {
     return (
@@ -14,28 +15,36 @@ function AppRoutes() {
             <Route path="/login" element={<Login />} />
 
             <Route 
-            path="/dashboard" 
-            element={
-                <ProtectedRoute>
-                    <Dashboard />
-                </ProtectedRoute>
+                path="/dashboard" 
+                element={
+                    <ProtectedRoute>
+                        <Dashboard />
+                    </ProtectedRoute>
             } 
             />
             <Route 
-            path="/assets" 
-            element={
-                <ProtectedRoute>
-                    <AssetPage />
-                </ProtectedRoute>
+                path="/assets" 
+                element={
+                    <ProtectedRoute>
+                        <AssetPage />
+                    </ProtectedRoute>
             } 
             />
             <Route
-            path="/assets/:id" 
-            element={<AssetDetailPage/>}
+                path="/assets/:id" 
+                element={<AssetDetailPage/>}
             />
             <Route 
-            path="/employees"
-            element={<EmployeePage />}
+                path="/employees"
+                element={<EmployeePage />}
+            />
+            <Route
+                path="/categories"
+                element={
+                    <ProtectedRoute>
+                        <CategoryPage />
+                    </ProtectedRoute>
+                }
             />
         </Routes>
         

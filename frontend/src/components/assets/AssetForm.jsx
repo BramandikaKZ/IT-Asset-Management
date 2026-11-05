@@ -49,7 +49,7 @@ function AssetForm({ asset, onClose, onSuccess }) {
 
         const loadCategories = async () => {
             try {
-                const result = await categoryService.getAllCategories();
+                const result = await categoryService.getCategories();
                 console.log("Categories:", result);
                 setCategories(result.data || []);
             } catch (error) {
@@ -158,6 +158,9 @@ function AssetForm({ asset, onClose, onSuccess }) {
             );
         }
     };
+
+    console.log("CATEGORIES:", categories);
+    console.log("FORM DATA:", formData);
 
     return (
         <div className="card shadow mb-4">
