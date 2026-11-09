@@ -8,6 +8,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import AssetDetailPage from "../pages/assets/AssetDetailPage"
 import CategoryPage from "../pages/category/CategoryPage";
 import BrandPage from "../pages/brand/BrandPage";
+import LocationPage from "../pages/location/LocationPage";
 
 function AppRoutes() {
     return (
@@ -52,6 +53,14 @@ function AppRoutes() {
                 element={
                     <ProtectedRoute>
                         <BrandPage />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/locations"
+                element={
+                    <ProtectedRoute>
+                        <LocationPage />
                     </ProtectedRoute>
                 }
             />

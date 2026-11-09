@@ -59,7 +59,7 @@ function AssetForm({ asset, onClose, onSuccess }) {
 
         const loadBrands = async () => {
             try {
-                const result = await brandService.getAllBrands();
+                const result = await brandService.getBrands();
                 console.log("Brands:", result);
                 setBrands(result.data || []);
             } catch (error) {
@@ -79,7 +79,7 @@ function AssetForm({ asset, onClose, onSuccess }) {
 
         const loadLocations = async () => {
             try {
-                const result = await locationService.getAllLocations();
+                const result = await locationService.getLocations();
                 console.log("Locations:", result);
                 setLocations(result.data || []);
             } catch (error) {

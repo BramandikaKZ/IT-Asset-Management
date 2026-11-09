@@ -100,11 +100,21 @@ async function deleteBrand(req, res) {
             success: true,
             message: "Brand deleted successfully"
         });
+
     } catch (error) {
+        console.error("DELETE BRAND ERROR:", error);
+
+        // Foreign key constraint
+        if (error.code === "ER_ROW_IS_REFERENCED_2" || error.errno === 1451) {
+            return res.status(409).json({
+                success: false,
+                message: "Cannot delete brand because it is currently used by an asset."
+            });
+        }
+
         res.status(500).json({
             success: false,
-            message: "Failed to delete brand",
-            error: error.message
+            message: "Failed to delete brand"
         });
     }
 }
