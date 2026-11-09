@@ -1,12 +1,29 @@
+
 import api from "./api";
 
-const brandService = {
-
-    async getAllBrands() {
-        const response = await api.get("/brands");
-        return response.data;
-    }
-
+export const getBrands = async () => {
+    const response = await api.get("/brands");
+    return response.data;
 };
 
-export default brandService;
+export const createBrand = async (brandData) => {
+    const response = await api.post("/brands", brandData);
+    return response.data;
+};
+
+export const updateBrand = async (id, brandData) => {
+    const response = await api.put(`/brands/${id}`, brandData);
+    return response.data;
+};
+
+export const deleteBrand = async (id) => {
+    const response = await api.delete(`/brands/${id}`);
+    return response.data;
+};
+
+export default {
+    getBrands,
+    createBrand,
+    updateBrand,
+    deleteBrand,
+};

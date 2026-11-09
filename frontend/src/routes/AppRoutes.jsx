@@ -7,6 +7,7 @@ import AdminLayout from "../layouts/AdminLayout";
 import ProtectedRoute from "./ProtectedRoute";
 import AssetDetailPage from "../pages/assets/AssetDetailPage"
 import CategoryPage from "../pages/category/CategoryPage";
+import BrandPage from "../pages/brand/BrandPage";
 
 function AppRoutes() {
     return (
@@ -43,6 +44,14 @@ function AppRoutes() {
                 element={
                     <ProtectedRoute>
                         <CategoryPage />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/brands"
+                element={
+                    <ProtectedRoute>
+                        <BrandPage />
                     </ProtectedRoute>
                 }
             />
